@@ -14,6 +14,7 @@ var Queue = function() {
 
   someInstance.dequeue = function() {
     var dequed = storage[0];
+    // we start at the second element in the array since the first will be removed
     for (var i = 1; i < length; i++) {
       storage[i - 1] = storage[i];
     }
