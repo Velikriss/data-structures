@@ -10,10 +10,12 @@ var Tree = function(value) {
 
 var treeMethods = {};
 
+/*** time complexity of function: constant ***/
 treeMethods.addChild = function(value) {
   this.children.push(Tree(value));
 };
 
+/*** time complexity of function: linear ***/
 treeMethods.contains = function(target) {
   if (this.value === target) {
     return true;

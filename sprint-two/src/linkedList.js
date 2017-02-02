@@ -3,6 +3,7 @@ var LinkedList = function() {
   list.head = null;
   list.tail = null;
 
+  /*** time complexity of function: constant ***/
   list.addToTail = function(value) {
     // change the list.tail to point at whatever we added
     // change the previous tail's next to also point at whatever we added
@@ -18,6 +19,7 @@ var LinkedList = function() {
     } 
   };
 
+  /*** time complexity of function: constant ***/
   list.removeHead = function() {
     if (this.head === null) {
       return null;
@@ -29,6 +31,7 @@ var LinkedList = function() {
     return node.value;
   };
 
+  /*** time complexity of function: linear ***/
   list.contains = function(target) {
     var currentNode = this.head;
     while (currentNode !== null) {
