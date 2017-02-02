@@ -19,6 +19,9 @@ var LinkedList = function() {
   };
 
   list.removeHead = function() {
+    if (this.head === null) {
+      return null;
+    }
     var node = this.head;
     this.head = node.next;
     // change list.head to point at the next node

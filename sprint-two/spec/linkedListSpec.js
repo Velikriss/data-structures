@@ -51,5 +51,13 @@ describe('linkedList', function() {
     expect(linkedList.contains(4)).to.equal(false);
   });
 
+  it('shouldn\'t error out when removedHead is called without any head', function() {
+    var removedHead = linkedList.removeHead();
+    expect(removedHead).to.equal(null);
+  });
+
+  it('should not error when calling contains on an empty list', function() {
+    expect(linkedList.contains(2)).to.equal(false);
+  });
   // add more tests here to test the functionality of linkedList
 });
