@@ -57,6 +57,7 @@ HashTable.prototype.checkKeyValue = function(key) {
 
 /*
  * Complexity: What is the time complexity of the above functions?
+  typically is close to constant time, but as each bucket grows it could be worst case linear. 
  */
 
 
