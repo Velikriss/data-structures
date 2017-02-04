@@ -41,4 +41,15 @@ describe('tree', function() {
     expect(tree.contains(8)).to.equal(true);
   });
 
+  it('should be able to add falsy values to the tree', function() {
+    tree.addChild(5);
+    tree.addChild(null);
+    tree.children[0].addChild(-0);
+    tree.children[1].addChild(NaN);  
+    expect(tree.contains(null)).to.equal(true);
+    expect(tree.contains(-0)).to.equal(true);
+    expect(tree.contains(NaN)).to.equal(true); 
+    expect(tree.contains('')).to.equal(false);
+  });
+
 });

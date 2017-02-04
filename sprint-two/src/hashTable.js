@@ -26,10 +26,12 @@ HashTable.prototype.insert = function(k, v) {
         traversal = traversal.next;
       }
       traversal.next = pair;
-      this._storage.incrementSize(index, 1);
+      this._storage.incrementSize(index, 1); 
     }
-  }  
-  console.log('After an increment: ' + this._storage.getSize(index));
+  }
+  if (this._storage.getSize(index) > this._limit * 0.75) {
+    this.resize(this._limit * 2);
+  }
 };
 
 HashTable.prototype.retrieve = function(k, cmd) {
@@ -57,12 +59,10 @@ HashTable.prototype.remove = function(k) {
       this._storage.incrementSize(index, -1);
       return;
     }
-    //debugger;
     while (current !== null) {
       if (current[k] !== undefined) {
         prev.next = current.next;
         this._storage.incrementSize(index, -1);
-        console.log('After a decrement: ' + this._storage.getSize(index));
       }
       prev = current;
       current = current.next;
@@ -72,8 +72,35 @@ HashTable.prototype.remove = function(k) {
     if (prev[k] !== undefined) {
       this._storage.set(index, undefined);
       this._storage.incrementSize(index, -1);
-      console.log('After a decrement: ' + this._storage.getSize(index));
 
+    }
+  }
+  if (this._storage.getSize(index) < this._limit * 0.25) {
+    this.resize(this._limit * 0.5);
+  }
+};
+
+//Dave hash resize
+
+HashTable.prototype.resize = function(newSize) {
+  var old = this._storage;
+  var oldSize = this._limit;
+  this._limit = newSize;
+  this._storage = LimitedArray(this._limit);
+  this._storage.resetSize();
+  for (var i = 0; i < oldSize; i++) { //<<--- iterating through buckets
+    var node = old.get(i);
+    if (node === undefined) {
+
+    } else {
+      while (node !== null) {
+        for (var key in node) {
+          if (key !== 'next') {
+            this.insert(key, node[key]);
+          }
+        }
+        node = node.next;
+      }
     }
   }
 };

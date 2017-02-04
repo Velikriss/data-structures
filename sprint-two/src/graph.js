@@ -36,7 +36,6 @@ Graph.prototype.removeNode = function(node) {
         this.removeEdge(node, this.vertices[i].edges[j]);
       }
       this.vertices.splice(i, 1);
-      //remove edges later
     }
   }
   
@@ -85,6 +84,10 @@ Graph.prototype.addEdge = function(fromNode, toNode) {
   }*/
   var count = 0;
   var index = 0;
+  if (this.hasEdge(fromNode, toNode)) {
+    return;
+  }
+  
   while (count < 2) {
     if (this.vertices[index].value === fromNode) {
       if (fromNode === toNode) {

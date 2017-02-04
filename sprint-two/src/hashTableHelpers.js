@@ -13,6 +13,7 @@
 
 var LimitedArray = function(limit) {
   var storage = [];
+  var storageSize = [];
 
   var limitedArray = {};
   limitedArray.get = function(index) {
@@ -30,17 +31,26 @@ var LimitedArray = function(limit) {
   };
 
   limitedArray.getSize = function(index) {
-    if (storage[index] !== undefined) {
-      return storage[index].size;
+    if (isNaN(storageSize[index]) === true) {
+      storageSize[index] = 0;
     }
-    return 0;
+    return storageSize[index];
+  };
+
+  limitedArray.getAllSizes = function(index) {
+    
+    return storageSize;
   };
 
   limitedArray.incrementSize = function(index, value) {
-    if (this.getSize(index) === undefined) {
-      storage[index].size = 1;
-    } else {
-      storage[index].size += value;
+    var size = this.getSize(index);
+    size += value;
+    storageSize[index] = size;
+  };
+
+  limitedArray.resetSize = function() {
+    for (var i = 0; i < storageSize.length; i++) {
+      storageSize[i] = 0;
     }
   };
 

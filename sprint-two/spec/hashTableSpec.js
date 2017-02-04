@@ -1,7 +1,14 @@
 describe('hashTable', function() {
   var hashTable;
   var people = [['Steven', 'Tyler'], ['George', 'Harrison'], ['Mr.', 'Doob'], ['Dr.', 'Sunshine'], ['John', 'Resig'], ['Brendan', 'Eich'], ['Alan', 'Turing']];
+  for (var i = 0; i < 100; i++) {
+    var firstName = people[i][0] + i + '';
+    var lastName = people[i][1] + i + '';
+    people.push([firstName, lastName]);
+  }
 
+  //we structured our hash table in such a way that it checks individual buckets instead of the global count of insertations as we believe it to be more efficient this way.  As a result, 
+  //we made alterations to the test in order to confirm that resize behaved as expected.
 
   beforeEach(function() {
     hashTable = new HashTable();
@@ -29,6 +36,34 @@ describe('hashTable', function() {
     expect(hashTable.retrieve('Bob')).to.equal('Barker');
   });
 
+  it('should overwrite values that have the same key even if they are in a linked list', function() {
+    var oldHashFunction = window.getIndexBelowMaxForKey;
+    window.getIndexBelowMaxForKey = function() { return 0; };
+    hashTable.insert('Gob', 'Bluth');
+    hashTable.insert('Buster', 'Bluth');
+    hashTable.insert('Michael', 'Bluth');
+    hashTable.insert('Michael', 'George Bluth');
+    expect(hashTable.retrieve('Michael')).to.equal('George Bluth');
+    window.getIndexBelowMaxForKey = oldHashFunction;
+  });
+
+  it('should delete values that are in a linked list', function() {
+    var oldHashFunction = window.getIndexBelowMaxForKey;
+    window.getIndexBelowMaxForKey = function() { return 0; };
+    hashTable.insert('Gob', 'Bluth');
+    hashTable.insert('Buster', 'Bluth');
+    hashTable.insert('Michael', 'Bluth');
+    hashTable.insert('Michael', 'George Bluth');
+    hashTable.remove('Michael');
+    hashTable.remove('Gob');
+    hashTable.remove('Buster');
+    expect(hashTable.retrieve('Michael')).to.equal(undefined);
+    expect(hashTable.retrieve('Gob')).to.equal(undefined);
+    expect(hashTable.retrieve('Buster')).to.equal(undefined);
+
+    window.getIndexBelowMaxForKey = oldHashFunction;
+  });
+
   it('should not contain values that were removed', function() {
     hashTable.insert('Steven', 'Tyler');
     hashTable.remove('Steven');
@@ -48,7 +83,7 @@ describe('hashTable', function() {
   });
 
   // (Advanced! Remove the extra "x" when you want the following tests to run)
-  xit ('should double in size when needed', function() {
+  it ('should double in size when needed', function() {
     _.each(people, function(person) {
       var firstName = person[0];
       var lastName = person[1];
@@ -58,7 +93,8 @@ describe('hashTable', function() {
     expect(hashTable._limit).to.equal(16);
   });
 
-  xit ('should halve in size when needed', function() {
+
+  it ('should halve in size when needed', function() {
     _.each(people, function(person) {
       var firstName = person[0];
       var lastName = person[1];
@@ -66,6 +102,9 @@ describe('hashTable', function() {
       expect(hashTable.retrieve(firstName)).to.equal(lastName);
     });
     expect(hashTable._limit).to.equal(16);
+    for (var j = 0; j < 85; j++ ) {
+      hashTable.remove(people[j][0]);
+    }
     hashTable.remove('George');
     hashTable.remove('Dr.');
     hashTable.remove('Steven');
