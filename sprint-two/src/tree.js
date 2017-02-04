@@ -17,7 +17,7 @@ treeMethods.addChild = function(value) {
 
 /*** time complexity of function: linear ***/
 treeMethods.contains = function(target) {
-  if (this.value === target) {
+  if (this.value === target || (isNaN(target) === true && isNaN(this.value) === true)) {
     return true;
   } else {
     if (this.children.length > 0) {
