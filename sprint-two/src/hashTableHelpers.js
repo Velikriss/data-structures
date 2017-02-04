@@ -29,6 +29,21 @@ var LimitedArray = function(limit) {
     }
   };
 
+  limitedArray.getSize = function(index) {
+    if (storage[index] !== undefined) {
+      return storage[index].size;
+    }
+    return 0;
+  };
+
+  limitedArray.incrementSize = function(index, value) {
+    if (this.getSize(index) === undefined) {
+      storage[index].size = 1;
+    } else {
+      storage[index].size += value;
+    }
+  };
+
   var checkLimit = function(index) {
     if (typeof index !== 'number') {
       throw new Error('setter requires a numeric index for its first argument');

@@ -31,15 +31,14 @@ BinarySearchTree.prototype.contains = function(value) {
 
 };
 BinarySearchTree.prototype.depthFirstLog = function(callback) {
-  var node = this;
-  callback(node.value);
+  callback(this.value);
 
-  if (node.left !== null) {
-    this.depthFirstLog.call(node.left, callback);
+  if (this.left !== null) {
+    this.depthFirstLog.call(this.left, callback);
   }
 
-  if (node.right !== null) {
-    this.depthFirstLog.call(node.right, callback); 
+  if (this.right !== null) {
+    this.depthFirstLog.call(this.right, callback); 
   }
 
 

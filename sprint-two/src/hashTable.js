@@ -12,22 +12,27 @@ HashTable.prototype.insert = function(k, v) {
   pair['next'] = null;
   if (!this._storage.get(index)) {
     this._storage.set(index, pair);
+    this._storage.incrementSize(index, 1);
   } else {
     var traversal = this._storage.get(index);
     if (traversal[k] !== undefined) {
       this._storage.set(index, pair);
     } else {
       while (traversal.next !== null) {
+        if (traversal.next[k] !== undefined) {
+          traversal.next = pair;
+          return;
+        }
         traversal = traversal.next;
       }
-      traversal.next = pair;  
+      traversal.next = pair;
+      this._storage.incrementSize(index, 1);
     }
-  }
-
-  
+  }  
+  console.log('After an increment: ' + this._storage.getSize(index));
 };
 
-HashTable.prototype.retrieve = function(k) {
+HashTable.prototype.retrieve = function(k, cmd) {
   var index = getIndexBelowMaxForKey(k, this._limit);
   var traversal = this._storage.get(index);
   if (traversal === undefined) {
@@ -44,13 +49,33 @@ HashTable.prototype.retrieve = function(k) {
 
 HashTable.prototype.remove = function(k) {
   var index = getIndexBelowMaxForKey(k, this._limit);
-  this._storage.set(index, undefined);
-};
+  var prev = this._storage.get(index);
+  var current = prev.next;
+  if (this._storage.getSize(index) > 1) {
+    if (prev[k] !== undefined) {
+      this._storage.set(index, current);
+      this._storage.incrementSize(index, -1);
+      return;
+    }
+    //debugger;
+    while (current !== null) {
+      if (current[k] !== undefined) {
+        prev.next = current.next;
+        this._storage.incrementSize(index, -1);
+        console.log('After a decrement: ' + this._storage.getSize(index));
+      }
+      prev = current;
+      current = current.next;
+    }
+    return undefined;  
+  } else {
+    if (prev[k] !== undefined) {
+      this._storage.set(index, undefined);
+      this._storage.incrementSize(index, -1);
+      console.log('After a decrement: ' + this._storage.getSize(index));
 
-HashTable.prototype.checkKeyValue = function(key) {
-  var index = getIndexBelowMaxForKey(key, this._limit);
-  
-
+    }
+  }
 };
 
 
